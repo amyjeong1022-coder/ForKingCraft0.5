@@ -3,74 +3,713 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KING 해커톤 · 배포 확인</title>
+  <title>민첩한 하루 되세요!</title>
+
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: #eef1eb; color: #17241c; font-family: system-ui, "Malgun Gothic", sans-serif; }
-    main { width: min(100%, 720px); padding: clamp(24px, 5vw, 48px); border: 1px solid #00462a; border-radius: 8px; background: white; }
-    .label { margin: 0 0 24px; color: #00462a; font-size: 14px; font-weight: 700; }
-    h1 { margin: 0 0 16px; font-size: clamp(28px, 6vw, 42px); }
-    p { line-height: 1.7; }
-    #stage { display: grid; place-items: center; min-height: 180px; margin: 28px 0 20px; padding: 24px; background: #f3f5f1; border: 1px solid #d8ded7; text-align: center; }
-    #message { margin: 0; }
-    .buttons { display: flex; flex-wrap: wrap; gap: 12px; }
-    button { padding: 12px 20px; border: 1px solid #00462a; border-radius: 4px; background: #00462a; color: white; font: inherit; cursor: pointer; }
-    #restart { background: white; color: #00462a; }
-    button:disabled { opacity: .4; cursor: default; }
-    button:focus-visible { outline: 3px solid #69a58c; outline-offset: 4px; }
-    .guide { margin-top: 28px; padding: 24px; border: 1px solid #d8ded7; background: #f8faf6; }
-    .guide h2 { margin: 0 0 12px; font-size: 22px; }
-    .guide li { margin: 10px 0; line-height: 1.7; }
-    .sheet-link { display: inline-block; margin-top: 8px; padding: 12px 18px; background: #00462a; color: white; border-radius: 4px; text-decoration: none; }
-    .sheet-link:focus-visible { outline: 3px solid #69a58c; outline-offset: 4px; }
-    .note { margin-top: 28px; padding-top: 20px; border-top: 1px solid #d8ded7; color: #68746b; font-size: 14px; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(rgba(239, 247, 241, 0.94), rgba(239, 247, 241, 0.94)),
+        radial-gradient(circle at top left, #dff3e6 0, transparent 40%),
+        radial-gradient(circle at bottom right, #cde8d8 0, transparent 40%);
+      color: #1d2f24;
+      font-family: system-ui, "Malgun Gothic", sans-serif;
+    }
+
+    main {
+      width: min(100%, 760px);
+      min-height: 650px;
+      padding: clamp(24px, 5vw, 42px);
+      border: none;
+      border-radius: 28px;
+      background: rgba(255,255,255,.97);
+      box-shadow:
+        0 20px 50px rgba(33,80,52,.16),
+        0 4px 12px rgba(33,80,52,.08);
+      overflow: hidden;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      color: #14532d;
+      font-size: clamp(32px, 6vw, 50px);
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    h2 {
+      margin: 0;
+      color: #1f3d2a;
+      font-size: 28px;
+    }
+
+    p {
+      line-height: 1.7;
+    }
+
+    button {
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #2f855a, #236c48);
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #184e34;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    button:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #184e34;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #69a58c;
+      outline-offset: 4px;
+    }
+
+    /* 시작 화면 */
+    #startScreen {
+      min-height: 560px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    #startScreen > div {
+      width: min(100%, 520px);
+      padding: 46px 32px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #f8fff9, #edf8ef);
+      border: 2px solid #d2ead8;
+      box-shadow: 0 12px 30px rgba(52,120,74,.12);
+    }
+
+    .start-icons {
+      font-size: 42px;
+      margin-bottom: 16px;
+      letter-spacing: 8px;
+    }
+
+    #startScreen p {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #4b6353;
+    }
+
+    #startButton {
+      margin-top: 18px;
+      padding: 16px 34px;
+      font-size: 20px;
+    }
+
+    /* 게임 화면 */
+    #gameScreen {
+      min-height: 560px;
+      text-align: center;
+      transition: background .25s ease;
+      border-radius: 22px;
+      padding: 4px;
+    }
+
+    .top-ui {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .top-ui span {
+      padding: 12px 8px;
+      border-radius: 14px;
+      background: #edf7ef;
+      border: 1px solid #d0e7d5;
+      color: #28563a;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    #scoreDisplay {
+      background: #eef4ff;
+      border-color: #d6e1fb;
+      color: #315b9e;
+    }
+
+    #timer {
+      background: #fff4dc;
+      border-color: #f2d29b;
+      color: #8c5a09;
+    }
+
+    .scene-badge {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.8);
+      border: 1px solid rgba(0,0,0,.08);
+      font-size: 13px;
+      font-weight: 800;
+      color: #466151;
+    }
+
+    #mission {
+      display: inline-block;
+      margin: 0 auto 4px;
+      padding: 14px 24px;
+      border-radius: 18px;
+      background: #163d27;
+      color: white;
+      box-shadow: 0 6px 16px rgba(22,61,39,.18);
+    }
+
+    #feedback {
+      min-height: 34px;
+      margin: 10px 0 0;
+      color: #d97706;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    #character {
+      font-size: 112px;
+      margin-top: 18px;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.12));
+      user-select: none;
+    }
+
+    #objects {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      margin-top: 16px;
+      border-radius: 24px;
+      border: 2px dashed rgba(55,95,67,.25);
+      overflow: hidden;
+      transition: background .25s ease, border-color .25s ease;
+    }
+
+    .objectButton {
+      position: absolute;
+      width: 76px;
+      height: 76px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      border: 2px solid #d5e2d8;
+      background: white;
+      box-shadow:
+        0 8px 16px rgba(46,82,57,.12),
+        0 4px 0 #d2ded5;
+      font-size: 44px;
+      user-select: none;
+    }
+
+    .objectButton:hover {
+      transform: scale(1.12) rotate(-2deg);
+    }
+
+    .objectButton.correct {
+      background: #dcfce7;
+      border: 3px solid #22c55e;
+      box-shadow: 0 0 0 6px rgba(34,197,94,.15);
+      transform: scale(1.18);
+    }
+
+    .objectButton.wrong {
+      background: #fee2e2;
+      border: 3px solid #ef4444;
+      box-shadow: 0 0 0 6px rgba(239,68,68,.12);
+      animation: shake .25s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* 장면별 분위기 */
+    #gameScreen.bedroom {
+      background: linear-gradient(180deg, #fffaf0, #fff7df);
+    }
+
+    #gameScreen.bedroom #objects {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,244,205,.75)),
+        repeating-linear-gradient(
+          90deg,
+          transparent 0 54px,
+          rgba(255,255,255,.25) 54px 108px
+        );
+      border-color: #ecd9a2;
+    }
+
+    #gameScreen.bathroom {
+      background: linear-gradient(180deg, #eefaff, #e4f6ff);
+    }
+
+    #gameScreen.bathroom #objects {
+      background:
+        linear-gradient(rgba(255,255,255,.58), rgba(225,246,255,.75)),
+        repeating-linear-gradient(
+          0deg,
+          transparent 0 48px,
+          rgba(143,204,230,.15) 48px 50px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent 0 48px,
+          rgba(143,204,230,.15) 48px 50px
+        );
+      border-color: #b9ddeb;
+    }
+
+    #gameScreen.hallway {
+      background: linear-gradient(180deg, #fbf6ef, #f5eadf);
+    }
+
+    #gameScreen.hallway #objects {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.5), rgba(241,226,209,.78)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(160,118,79,.05) 0 32px,
+          rgba(255,255,255,.12) 32px 64px
+        );
+      border-color: #dfc8b0;
+    }
+
+    #gameScreen.street {
+      background: linear-gradient(180deg, #eff9ec, #e4f3de);
+    }
+
+    #gameScreen.street #objects {
+      background:
+        linear-gradient(180deg, rgba(235,249,232,.6), rgba(219,237,215,.9)),
+        linear-gradient(180deg, transparent 0 68%, rgba(120,140,120,.12) 68% 70%, transparent 70%);
+      border-color: #bfd9b7;
+    }
+
+    /* 결과 화면 */
+    #resultScreen {
+      min-height: 560px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    #resultScreen > div {
+      width: min(100%, 500px);
+      padding: 42px 30px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, #f7fff8, #ecf8ef);
+      border: 2px solid #d4ebda;
+      box-shadow: 0 14px 30px rgba(46,100,63,.13);
+    }
+
+    .result-icon {
+      font-size: 54px;
+      margin-bottom: 12px;
+    }
+
+    #resultScreen p {
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 12px;
+      background: white;
+      border: 1px solid #dfe8e1;
+      font-weight: 700;
+    }
+
+    #restartButton {
+      margin-top: 24px;
+      padding: 14px 28px;
+      background: white;
+      color: #236c48;
+      border: 2px solid #2f855a;
+      box-shadow: 0 5px 0 #b8d8c3;
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 12px; }
+
+      main {
+        min-height: 570px;
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      #startScreen > div,
+      #resultScreen > div {
+        padding: 30px 20px;
+      }
+
+      .top-ui {
+        gap: 6px;
+      }
+
+      .top-ui span {
+        font-size: 13px;
+        padding: 10px 4px;
+      }
+
+      #mission {
+        font-size: 22px;
+      }
+
+      #character {
+        font-size: 88px;
+      }
+
+      #objects {
+        height: 330px;
+      }
+
+      .objectButton {
+        width: 62px;
+        height: 62px;
+        font-size: 36px;
+      }
+    }
   </style>
 </head>
+
 <body>
   <main>
-    <p class="label">KING · 바이브코딩 해커톤</p>
-    <!-- 사전 수정 연습: 아래 제목을 원하는 문구로 바꿔 보세요. -->
-    <h1>해커톤 준비 완료</h1>
-    <p>이 화면이 GitHub Pages 공개 주소에서 보이면 배포에 성공한 것입니다.<br>시작 버튼을 눌러 기본 동작도 확인해 주세요.</p>
-    <section id="stage" aria-label="실행 확인 화면" aria-live="polite">
-      <p id="message">시작 버튼을 눌러 주세요.</p>
+
+    <section id="startScreen">
+      <div>
+        <div class="start-icons">⏰ 🪥 🎒 🚌</div>
+
+        <h1>민첩한 하루 되세요!</h1>
+
+        <p>
+          아침부터 외출까지,<br>
+          지금 필요한 물건을 빠르게 찾아 클릭하세요!
+        </p>
+
+        <p><strong>조작:</strong> 클릭 한 번</p>
+        <p><strong>목표:</strong> 30초 안에 4개의 미션 완료</p>
+        <p><strong>난이도:</strong> 매 장면 10~14개 물건 중 정답 찾기</p>
+        <p><strong>난이도:</strong> 매 장면마다 6~8개의 카드가 랜덤 등장!</p>
+
+        <button id="startButton" type="button">
+          시작하기
+        </button>
+      </div>
     </section>
-    <div class="buttons">
-      <button id="start" type="button">시작</button>
-      <button id="restart" type="button" disabled>다시 시작</button>
-    </div>
-    <section class="guide" aria-labelledby="guide-title">
-      <h2 id="guide-title">참가자 정보 사전 입력</h2>
-      <p>정기 모임 전에 GitHub와 Skeam 계정을 만들고, 아래 스프레드시트에 본인 정보를 미리 기재해 주세요.</p>
-      <ol>
-        <li><strong>GitHub 계정:</strong> 계정을 생성하고 이메일 인증을 완료합니다. 공개 저장소를 만들고 이 파일을 GitHub Pages에 배포해 봅니다.</li>
-        <li><strong>Skeam 계정:</strong> 계정을 생성하고 행사에 사용할 기기에서 로그인을 확인합니다.</li>
-        <li><strong>스프레드시트:</strong> 빈 행 하나에 이름, Skeam 닉네임, 참여 여부, 사용할 AI·제작 도구를 입력합니다. 이미 본인 행이 있다면 해당 행을 수정합니다.</li>
-        <li><strong>행사 후 입력:</strong> 작품명과 Skeam 링크를 입력합니다. 아직 만들지 않은 작품 정보와 링크는 비워 두어도 됩니다.</li>
-      </ol>
-      <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1eLqrOtpMhR3VfCOIV-9_RNtlB1wUtHm_m6aK4ziDUH8/edit?usp=sharing" target="_blank" rel="noopener noreferrer">참가자 정보 입력 시트 열기 ↗</a>
-      <p style="font-size:14px;color:#68746b">다른 참가자의 행은 수정하지 마세요. 비밀번호·API 키는 기재하지 않습니다. 사전 준비·출석·제출 상태·실행 확인은 운영진이 관리합니다.</p>
+
+    <section id="gameScreen" style="display:none;">
+
+      <div class="top-ui">
+        <span id="progress">1 / 4</span>
+        <span id="scoreDisplay">점수: 0</span>
+        <span id="timer">30초</span>
+      </div>
+
+      <div id="sceneBadge" class="scene-badge">기상</div>
+
+      <h2 id="mission">알람을 끄세요!</h2>
+
+      <p id="feedback"></p>
+
+      <div id="character">👧</div>
+
+      <div id="objects"></div>
+
     </section>
-    <p class="note">이 파일은 배포 연습용 기본 틀입니다. 실제 게임 규칙과 조작은 당일 추가하세요.<br>사전 연습: 제목을 수정해 다시 올린 뒤 공개 페이지에도 반영되는지 확인합니다.</p>
+
+    <section id="resultScreen" style="display:none;">
+      <div>
+        <div id="resultIcon" class="result-icon">🎉</div>
+
+        <h1 id="resultTitle">오늘도 성공!</h1>
+
+        <p id="finalScore">최종 점수:</p>
+        <p id="finalTime">완료 시간:</p>
+        <p id="accuracy">정확도:</p>
+
+        <button id="restartButton" type="button">
+          다시 도전
+        </button>
+      </div>
+    </section>
+
   </main>
+
   <script>
-    // 외부 라이브러리 없이 이 파일 하나로 실행됩니다.
-    const message = document.getElementById('message');
-    const start = document.getElementById('start');
-    const restart = document.getElementById('restart');
-    start.addEventListener('click', () => {
-      message.textContent = '시작 버튼이 정상적으로 작동합니다. 다시 시작 버튼도 확인해 주세요.';
-      start.disabled = true;
-      restart.disabled = false;
-      restart.focus();
-    });
-    restart.addEventListener('click', () => {
-      message.textContent = '시작 버튼을 눌러 주세요.';
-      start.disabled = false;
-      restart.disabled = true;
-      start.focus();
+    const scenes = [
+      {
+        label: "기상",
+        mission: "알람을 끄세요!",
+        correct: "⏰",
+        wrong: ["📱", "☕", "🔑", "🎧", "📖", "💡", "🧸", "🕶️", "🪴", "🛏️", "🧦", "🧢", "🕯️", "🧴", "🖊️"],
+        theme: "bedroom"
+      },
+      {
+        label: "세면",
+        mission: "양치하세요!",
+        correct: "🪥",
+        wrong: ["🧼", "🧻", "🥤", "🧴", "🪒", "🪞", "🧽", "🛁", "🚿", "🪣", "🧹", "🧺", "🫧", "🧦", "🩴"],
+        theme: "bathroom"
+      },
+      {
+        label: "외출 준비",
+        mission: "가방을 챙기세요!",
+        correct: "🎒",
+        wrong: ["☂️", "👕", "👛", "🧢", "👟", "🧣", "📦", "🧤", "👜", "🧥", "👓", "⌚", "📱", "🔑", "🥤"],
+        theme: "hallway"
+      },
+      {
+        label: "이동",
+        mission: "버스를 타세요!",
+        correct: "🚌",
+        wrong: ["🚕", "🚲", "🚏", "🚗", "🛴", "🚚", "🚦", "🚇", "🏍️", "🚙", "🚐", "🚜", "🚑", "🚒", "🚓"],
+        theme: "street"
+      }
+    ];
+
+    const startScreen = document.getElementById("startScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const startButton = document.getElementById("startButton");
+    const restartButton = document.getElementById("restartButton");
+
+    const progress = document.getElementById("progress");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const timer = document.getElementById("timer");
+    const sceneBadge = document.getElementById("sceneBadge");
+    const mission = document.getElementById("mission");
+    const feedback = document.getElementById("feedback");
+    const objects = document.getElementById("objects");
+
+    const resultIcon = document.getElementById("resultIcon");
+    const resultTitle = document.getElementById("resultTitle");
+    const finalScore = document.getElementById("finalScore");
+    const finalTime = document.getElementById("finalTime");
+    const accuracy = document.getElementById("accuracy");
+
+    let currentScene = 0;
+    let score = 0;
+    let correctClicks = 0;
+    let totalClicks = 0;
+    let timeLeft = 30;
+    let timerInterval = null;
+    let inputLocked = false;
+
+    startButton.addEventListener("click", startGame);
+
+    function startGame() {
+      currentScene = 0;
+      score = 0;
+      correctClicks = 0;
+      totalClicks = 0;
+      timeLeft = 30;
+      inputLocked = false;
+
+      startScreen.style.display = "none";
+      resultScreen.style.display = "none";
+      gameScreen.style.display = "block";
+
+      scoreDisplay.textContent = "점수: 0";
+      timer.textContent = "30초";
+      feedback.textContent = "";
+
+      showScene();
+
+      clearInterval(timerInterval);
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timer.textContent = timeLeft + "초";
+
+        if (timeLeft <= 0) {
+          endGame(false);
+        }
+      }, 1000);
+    }
+
+    function showScene() {
+      if (currentScene >= scenes.length) {
+        endGame(true);
+        return;
+      }
+
+      inputLocked = false;
+
+      const scene = scenes[currentScene];
+
+      gameScreen.className = scene.theme;
+      progress.textContent = (currentScene + 1) + " / " + scenes.length;
+      sceneBadge.textContent = scene.label;
+      mission.textContent = scene.mission;
+      feedback.textContent = "";
+      objects.innerHTML = "";
+
+      // 매 장면마다 카드 수를 10~14개 사이에서 랜덤 결정
+      const cardCount = Math.floor(Math.random() * 5) + 10;
+
+      // 오답 후보를 섞고 필요한 수만큼 선택
+      const shuffledWrong = [...scene.wrong];
+      for (let i = shuffledWrong.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledWrong[i], shuffledWrong[j]] = [shuffledWrong[j], shuffledWrong[i]];
+      }
+
+      const objectList = [
+        { emoji: scene.correct, isCorrect: true },
+        ...shuffledWrong.slice(0, cardCount - 1).map(item => ({
+          emoji: item,
+          isCorrect: false
+        }))
+      ];
+
+      // 정답 위치까지 매번 바뀌도록 전체 카드 순서를 다시 섞음
+      for (let i = objectList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [objectList[i], objectList[j]] = [objectList[j], objectList[i]];
+      }
+
+      // 4 x 4 형태의 16개 안전 슬롯을 만든 뒤, 그중 10~14개를 무작위로 사용합니다.
+      // 각 슬롯 안에서도 살짝 위치가 달라져 매 판 배치가 똑같아 보이지 않습니다.
+      const slots = [];
+      const columns = 4;
+      const rows = 4;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < columns; col++) {
+          slots.push({
+            left: 3 + col * 24,
+            top: 3 + row * 24
+          });
+        }
+      }
+
+      // 사용할 슬롯 자체의 순서도 랜덤
+      for (let i = slots.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [slots[i], slots[j]] = [slots[j], slots[i]];
+      }
+
+      const positions = slots.slice(0, objectList.length).map(slot => ({
+        left: slot.left + (Math.random() * 4 - 2),
+        top: slot.top + (Math.random() * 4 - 2)
+      }));
+
+      objectList.forEach((item, index) => {
+        const button = document.createElement("button");
+
+        button.textContent = item.emoji;
+        button.className = "objectButton";
+        button.type = "button";
+
+        const pos = positions[index];
+        button.style.left = pos.left + "%";
+        button.style.top = pos.top + "%";
+
+        button.addEventListener("click", () => {
+          handleObjectClick(item.isCorrect, button);
+        });
+
+        objects.appendChild(button);
+      });
+    }
+
+    function handleObjectClick(isCorrect, button) {
+      if (inputLocked) return;
+
+      totalClicks++;
+
+      if (isCorrect) {
+        inputLocked = true;
+
+        score += 20;
+        correctClicks++;
+
+        scoreDisplay.textContent = "점수: " + score;
+        feedback.textContent = "정답!";
+        button.classList.add("correct");
+
+        setTimeout(() => {
+          currentScene++;
+          showScene();
+        }, 350);
+
+      } else {
+        score -= 5;
+
+        if (score < 0) {
+          score = 0;
+        }
+
+        scoreDisplay.textContent = "점수: " + score;
+        feedback.textContent = "앗! 다른 물건이에요.";
+
+        button.classList.add("wrong");
+
+        setTimeout(() => {
+          button.classList.remove("wrong");
+
+          if (!inputLocked) {
+            feedback.textContent = "";
+          }
+        }, 500);
+      }
+    }
+
+    function endGame(clearSuccess) {
+      clearInterval(timerInterval);
+      inputLocked = true;
+
+      gameScreen.style.display = "none";
+      resultScreen.style.display = "grid";
+
+      const usedTime = Math.max(0, 30 - timeLeft);
+
+      let accuracyValue = 0;
+
+      if (totalClicks > 0) {
+        accuracyValue = Math.round((correctClicks / totalClicks) * 100);
+      }
+
+      if (clearSuccess) {
+        score += Math.max(0, timeLeft);
+        resultIcon.textContent = "🎉";
+        resultTitle.textContent = "오늘도 성공!";
+      } else {
+        resultIcon.textContent = "⏰";
+        resultTitle.textContent = "시간 종료!";
+      }
+
+      finalScore.textContent = "최종 점수: " + score + "점";
+      finalTime.textContent = "완료 시간: " + usedTime + "초";
+      accuracy.textContent = "정확도: " + accuracyValue + "%";
+    }
+
+    restartButton.addEventListener("click", () => {
+      clearInterval(timerInterval);
+
+      resultScreen.style.display = "none";
+      gameScreen.style.display = "none";
+      startScreen.style.display = "grid";
     });
   </script>
 </body>
 </html>
-
